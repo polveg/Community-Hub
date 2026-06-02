@@ -140,6 +140,69 @@
             margin-bottom: 20px;
         }
 
+        .search-suggestions {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border: 1.5px solid #EAECEE;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 20, 74, 0.12);
+            z-index: 100;
+            max-height: 340px;
+            overflow-y: auto;
+        }
+
+        .search-suggestions.visible {
+            display: block;
+        }
+
+        .suggestions-group {
+            padding: 10px 0 4px;
+        }
+
+        .suggestions-group + .suggestions-group {
+            border-top: 1px solid #F5F6F7;
+        }
+
+        .suggestions-group-label {
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #999999;
+            padding: 0 16px 6px;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            font-size: 13px;
+            color: #333333;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .suggestion-item:hover {
+            background: #E1F4FF;
+            color: #0070F2;
+        }
+
+        .suggestion-item svg {
+            width: 14px;
+            height: 14px;
+            fill: #999999;
+            flex-shrink: 0;
+        }
+
+        .suggestion-item:hover svg {
+            fill: #0070F2;
+        }
+
         .search-wrapper svg {
             position: absolute;
             left: 16px;
@@ -431,7 +494,55 @@
             flex-shrink: 0;
         }
 
-        /* Request Banner */
+        /* Filter toggle */
+        .filter-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: '72', '72 Brand', 'Segoe UI', Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: #0070F2;
+            background: #E1F4FF;
+            border: 1.5px solid #1B90FF;
+            border-radius: 24px;
+            cursor: pointer;
+            padding: 8px 18px;
+            margin-bottom: 0;
+            transition: all 0.2s ease;
+        }
+
+        .filter-toggle:hover {
+            background: #1B90FF;
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(27, 144, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .filter-toggle svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            transition: transform 0.25s ease;
+        }
+
+        .filter-toggle.collapsed svg {
+            transform: rotate(-90deg);
+        }
+
+        .filter-body {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+            max-height: 400px;
+            opacity: 1;
+            margin-top: 20px;
+        }
+
+        .filter-body.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+        }
         .request-banner {
             margin-top: 48px;
             padding: 40px 48px;
@@ -518,6 +629,26 @@
                 max-width: 100%;
             }
         }
+        .community-card.coming-soon {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(1);
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: #999999;
+            background-color: #F5F6F7;
+            border: 1px dashed #CCCCCC;
+            margin-top: 4px;
+        }
+
         .empty-state {
             display: none;
             text-align: center;
@@ -669,9 +800,38 @@
     <!-- Filter Section -->
     <div class="filter-section">
         <div class="search-wrapper">
-            <input type="text" class="search-input" id="hubSearchInput" placeholder="Search communities by name...">
+            <input type="text" class="search-input" id="hubSearchInput" placeholder="Search communities by name, topic or keyword...">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <div class="search-suggestions" id="hubSearchSuggestions">
+                <div class="suggestions-group">
+                    <div class="suggestions-group-label">Hot Topics</div>
+                    <div class="suggestion-item" data-value="AI"><svg viewBox="0 0 24 24"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31z"/></svg>AI</div>
+                    <div class="suggestion-item" data-value="Joule"><svg viewBox="0 0 24 24"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31z"/></svg>Joule</div>
+                    <div class="suggestion-item" data-value="RISE"><svg viewBox="0 0 24 24"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31z"/></svg>RISE</div>
+                    <div class="suggestion-item" data-value="Migration"><svg viewBox="0 0 24 24"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31z"/></svg>Migration</div>
+                    <div class="suggestion-item" data-value="Cloud"><svg viewBox="0 0 24 24"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31z"/></svg>Cloud</div>
+                    <div class="suggestion-item" data-value="Security"><svg viewBox="0 0 24 24"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31z"/></svg>Security</div>
+                </div>
+                <div class="suggestions-group">
+                    <div class="suggestions-group-label">Communities</div>
+                    <div class="suggestion-item" data-value="Cyber Security"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>Cyber Security &amp; Compliance</div>
+                    <div class="suggestion-item" data-value="Integration"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>Integration</div>
+                    <div class="suggestion-item" data-value="Extension"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>Extension &amp; App Dev</div>
+                    <div class="suggestion-item" data-value="Global UX"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>Global UX/Mobile Services Community</div>
+                    <div class="suggestion-item" data-value="Cross Product"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>Cross Product UX Messaging</div>
+                    <div class="suggestion-item" data-value="SAP Build"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>SAP Build WZ Community</div>
+                    <div class="suggestion-item" data-value="BTP AI"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>BTP AI</div>
+                    <div class="suggestion-item" data-value="HANA"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>Upgrade and Migration (HANA Heros)</div>
+                    <div class="suggestion-item" data-value="Platform Execution"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>Platform Execution</div>
+                    <div class="suggestion-item" data-value="MDS"><svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>Minimized Downtime Service (MDS)</div>
+                </div>
+            </div>
         </div>
+        <button class="filter-toggle collapsed" id="filterToggle">
+            <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+            Filters
+        </button>
+        <div class="filter-body collapsed" id="filterBody">
         <div class="filter-group">
             <span class="filter-label">Category</span>
             <div class="filter-pills">
@@ -690,17 +850,32 @@
                 <button class="filter-pill platform-pill" data-platform="sharepoint">SharePoint</button>
                 <button class="filter-pill platform-pill" data-platform="workzone">Workzone</button>
                 <button class="filter-pill platform-pill" data-platform="teams">Teams</button>
+                <button class="filter-pill platform-pill" data-platform="directory">Distribution List</button>
+                <button class="filter-pill platform-pill" data-platform="newsletter">Newsletter</button>
             </div>
         </div>
+        <div class="filter-group">
+            <span class="filter-label">Hot Topics</span>
+            <div class="filter-pills">
+                <button class="filter-pill topic-pill active" data-topic="all">All</button>
+                <button class="filter-pill topic-pill" data-topic="AI">AI</button>
+                <button class="filter-pill topic-pill" data-topic="Joule">Joule</button>
+                <button class="filter-pill topic-pill" data-topic="RISE">RISE</button>
+                <button class="filter-pill topic-pill" data-topic="Migration">Migration</button>
+                <button class="filter-pill topic-pill" data-topic="Cloud">Cloud</button>
+                <button class="filter-pill topic-pill" data-topic="Security">Security</button>
+            </div>
+        </div>
+        </div><!-- end filter-body -->
     </div>
 
-    <div class="results-count" id="hubResultsCount">Showing 11 communities</div>
+    <div class="results-count" id="hubResultsCount">Showing 10 communities</div>
 
     <!-- Community Cards -->
     <div class="community-grid" id="hubCommunityGrid">
 
         <!-- Cyber Security & Compliance -->
-        <div class="community-card" data-category="security" data-name="Cyber Security and Compliance">
+        <div class="community-card" data-category="security" data-name="Cyber Security and Compliance" data-tags="risk assurance R&A compliance architecture C&A identity access governance IAG AC technical security TECH.SEC IAM AI security AI SEC authorizations AUTH">
             <div class="card-header">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96.21 96.21"><path d="M42.23,74.5h-22.37c-2.29,0-4.15-1.86-4.15-4.09v-26.64c0-2.29,1.86-4.09,4.15-4.09h44.68c2.29,0,4.15,1.86,4.15,4.09v16.36c0,2.59,2.16,4.75,4.75,4.75s4.75-2.16,4.75-4.75v-16.42c0-6.86-5.05-12.51-11.61-13.53v-6.19c0-13.23-10.76-23.99-24.05-23.99s-24.05,10.76-24.05,23.99v6.13c-6.98.66-12.45,6.55-12.45,13.65v26.64c0,7.58,6.19,13.71,13.77,13.71h22.43c2.65,0,4.81-2.16,4.81-4.81s-2.16-4.81-4.81-4.81ZM28.16,23.99c0-7.94,6.49-14.37,14.43-14.37s14.43,6.43,14.43,14.37v6.13h-28.86v-6.13Z"/><circle cx="42.17" cy="57.06" r="9.02"/><path d="M88.53,67.29c-2.04-1.74-5.05-1.5-6.79.48l-14.07,16.36-5.17-5.65c-1.8-1.98-4.81-2.1-6.79-.3s-2.1,4.81-.3,6.79l8.84,9.62c.9,1.02,2.22,1.56,3.55,1.56v.06h.06c1.32-.06,2.65-.66,3.55-1.68l17.62-20.44c1.74-2.04,1.5-5.05-.48-6.79Z"/></svg>
@@ -714,7 +889,7 @@
         </div>
 
         <!-- Integration -->
-        <div class="community-card" data-category="integration" data-name="Integration">
+        <div class="community-card" data-category="integration" data-name="Integration" data-tags="integration suite groovy development testing AIF application interface framework AEM event-driven ecosystem clean core integrated toolchain signavio leanix CALM APIM policy connect everything event enablement EEE RAP kafka bridge private deployment APIs dataspace cantena-X RISE essentials migration payload B2B paradigm shift business">
             <div class="card-header">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96.21 96.21"><path d="M4.81,96.21c-1.23,0-2.46-.47-3.4-1.41-1.88-1.88-1.88-4.92,0-6.8l18.25-18.25h-8.83c-2.66,0-4.81-2.15-4.81-4.81s2.15-4.81,4.81-4.81h20.44c2.66,0,4.81,2.15,4.81,4.81v20.44c0,2.66-2.15,4.81-4.81,4.81s-4.81-2.15-4.81-4.81v-8.83l-18.25,18.25c-.94.94-2.17,1.41-3.4,1.41ZM79.37,90.2h-26.46c-2.66,0-4.81-2.15-4.81-4.81s2.15-4.81,4.81-4.81h26.46c.66,0,1.2-.54,1.2-1.2v-26.46c0-2.66,2.15-4.81,4.81-4.81s4.81,2.15,4.81,4.81v26.46c0,5.97-4.86,10.82-10.82,10.82ZM10.82,48.11c-2.66,0-4.81-2.15-4.81-4.81v-26.46c0-5.97,4.86-10.82,10.82-10.82h26.46c2.66,0,4.81,2.15,4.81,4.81s-2.15,4.81-4.81,4.81h-26.46c-.66,0-1.2.54-1.2,1.2v26.46c0,2.66-2.15,4.81-4.81,4.81ZM85.39,36.08h-20.44c-2.66,0-4.81-2.15-4.81-4.81V10.82c0-2.66,2.15-4.81,4.81-4.81s4.81,2.15,4.81,4.81v8.83L88,1.41c1.88-1.88,4.92-1.88,6.8,0,1.88,1.88,1.88,4.92,0,6.8l-18.25,18.25h8.83c2.66,0,4.81,2.15,4.81,4.81s-2.15,4.81-4.81,4.81Z"/></svg>
@@ -741,20 +916,6 @@
             </div>
         </div>
 
-        <!-- UX/Mobility -->
-        <div class="community-card" data-category="ux" data-name="UX Mobility">
-            <div class="card-header">
-                <div class="card-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96.21 96.21"><path d="M91.4,90.2h-20.44c-2.66,0-4.81-2.15-4.81-4.81v-38.48c0-2.66,2.15-4.81,4.81-4.81h20.44c2.66,0,4.81,2.15,4.81,4.81v38.48c0,2.66-2.15,4.81-4.81,4.81ZM75.77,74.56h10.82v-22.85h-10.82v22.85Z"/><path d="M49.31,84.18h-20.44c-2.66,0-4.81-2.15-4.81-4.81s2.15-4.81,4.81-4.81h7.22v-8.42H10.82c-5.97,0-10.82-4.86-10.82-10.82V16.84C0,10.77,4.75,6.01,10.82,6.01h62.54c5.97,0,10.82,4.86,10.82,10.82v8.4c0,2.66-2.15,4.81-4.81,4.81s-4.81-2.15-4.81-4.81v-8.4c0-.69-.52-1.2-1.2-1.2H10.82c-.71,0-1.2.49-1.2,1.2v38.48c0,.69.52,1.2,1.2,1.2h38.47c2.66,0,4.81,2.15,4.81,4.81s-2.15,4.81-4.81,4.81h-3.59v8.42h3.61c2.66,0,4.81,2.15,4.81,4.81s-2.15,4.81-4.81,4.81Z"/></svg>
-                </div>
-                <span class="card-title">UX/Mobility</span>
-            </div>
-            <span class="card-category">UX / Mobility</span>
-            <div class="card-buttons">
-                <a href="https://sap.sharepoint.com/teams/CrossProductUXMessaging-draft/_layouts/15/AccessDenied.aspx?Source=https%3A%2F%2Fsap.sharepoint.com%2Fteams%2FCrossProductUXMessaging-draft%2FShared+Documents%2FForms%2FAllItems.aspx%3FFolderCTID%3D0x0120003C8FF7AD0ABA20418B199EF8CEB149FC%26id%3D%252Fteams%252FCrossProductUXMessaging-draft%252FShared%2520Documents%252FGeneral%252FContent%252FUX%2520Overview%252FPresentations&correlation=ee1305a2-a0d1-0001-5f35-697ebcfacb6a&Type=item&name=48be298b-0bce-4be9-b219-4a7375a9a53c&listItemId=546&listItemUniqueId=99872c46-941c-4251-a3a1-a583d87218c8&allowautoredirecttosource=true" class="card-btn" data-platform="sharepoint" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>SharePoint</a>
-            </div>
-        </div>
-
         <!-- Global UX/Mobile Services Community -->
         <div class="community-card" data-category="ux" data-name="Global UX Mobile Services Community">
             <div class="card-header">
@@ -766,6 +927,7 @@
             <span class="card-category">UX / Mobility</span>
             <div class="card-buttons">
                 <a href="https://teams.microsoft.com/l/team/19%3Ab727a70dad154991856b57bdda16a7e6%40thread.tacv2/conversations?groupId=973f36cb-d31d-4347-b7c9-68f94fbbf4f1&tenantId=42f7676c-f455-423c-82f6-dc2d99791af7" class="card-btn" data-platform="teams" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Teams</a>
+                <a href="https://profiles.wdf.sap.corp/groups/5732c27c7bcf847ab900001a/users" class="card-btn" data-platform="directory" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 8.5L4 7V5.99L12 11l8-5.01V7l-8 5.5z"/></svg>Distribution List</a>
             </div>
         </div>
 
@@ -784,7 +946,7 @@
         </div>
 
         <!-- SAP Build WZ Community -->
-        <div class="community-card" data-category="ux" data-name="SAP Build WZ Community">
+        <div class="community-card" data-category="ux" data-name="SAP Build WZ Community" data-tags="SAP Build Joule Studio Agent Builder Playbook">
             <div class="card-header">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96.21 96.21"><path d="M29.47,78.17H4.81c-2.66,0-4.81-2.15-4.81-4.81v-14.43c0-7.4,4.81-13.71,11.46-15.96-3.36-3.28-5.45-7.85-5.45-12.91,0-9.95,8.09-18.04,18.04-18.04s18.04,8.09,18.04,18.04c0,5.5-2.48,10.44-6.38,13.75,4.41,2.17,7.76,6.25,8.93,11.33.41,1.78-.22,3.64-1.64,4.8-4.57,3.75-7.71,8.86-8.83,14.37-.46,2.24-2.43,3.85-4.71,3.85ZM9.62,68.55h16.16c1.69-5.07,4.59-9.75,8.46-13.63-1.3-1.97-3.51-3.21-5.99-3.21h-11.42c-3.98,0-7.22,3.24-7.22,7.22v9.62ZM24.05,21.65c-4.64,0-8.42,3.78-8.42,8.42s3.78,8.42,8.42,8.42,8.42-3.78,8.42-8.42-3.78-8.42-8.42-8.42Z"/><path d="M91.4,90.2H28.86c-2.66,0-4.81-2.15-4.81-4.81v-6.01c0-13.88,8.15-25.9,19.92-31.5-4.85-4.4-7.9-10.75-7.9-17.8s3.12-13.82,8.55-18.4c5.45-4.59,12.67-6.51,19.81-5.28,9.77,1.74,17.73,9.71,19.38,19.39,1.23,7.13-.7,14.35-5.28,19.8-.69.82-1.44,1.59-2.22,2.31,11.76,5.61,19.9,17.62,19.9,31.5v6.01c0,2.66-2.15,4.81-4.81,4.81ZM33.67,80.58h52.91v-1.2c0-13.93-11.33-25.26-25.25-25.26h-2.41c-13.93,0-25.25,11.33-25.25,25.26v1.2ZM60.13,44.5c4.27,0,8.3-1.87,11.04-5.13,2.8-3.32,3.92-7.57,3.16-11.98-.98-5.76-5.73-10.5-11.56-11.53-4.38-.76-8.63.37-11.95,3.16-3.26,2.74-5.12,6.77-5.12,11.04,0,7.96,6.47,14.43,14.43,14.43Z"/></svg>
@@ -794,11 +956,13 @@
             <span class="card-category">UX / Mobility</span>
             <div class="card-buttons">
                 <a href="https://workzone.one.int.sap/site#workzone-home&/groups/zJfVxkPC5b2kQfs6YahqyX/workpage_tabs/w1nuhLsTsxfglpKbvfp2A5" class="card-btn" data-platform="workzone" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>Workzone</a>
+                <a href="https://profiles.wdf.sap.corp/groups/65d47f802b2da00133891053/users" class="card-btn" data-platform="directory" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 8.5L4 7V5.99L12 11l8-5.01V7l-8 5.5z"/></svg>Distribution List</a>
+                <a href="https://profiles.wdf.sap.corp/groups/640f30b6ab3057028eeba54d/users" class="card-btn" data-platform="newsletter" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Newsletter</a>
             </div>
         </div>
 
         <!-- BTP AI -->
-        <div class="community-card" data-category="ai" data-name="BTP AI">
+        <div class="community-card" data-category="ai" data-name="BTP AI" data-tags="AI Core AI LaunchPad Tabular AI Services SAP Foundation Model SAP Translation Hub HANA Cloud Joule for Developers SAP Build Code Joule for ABAP Joule Studio Joule skills Agent builder Gen AI Enterprise AI Automate SAP Build Joule Studio">
             <div class="card-header">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96.21 96.21"><path d="M48.1,96.21c-1.55,0-3-.74-3.9-2L.91,34.08c-1.24-1.73-1.2-4.07.1-5.75L21.45,1.87c.91-1.18,2.32-1.87,3.81-1.87h48.1c1.59,0,3.08.79,3.97,2.1l18.04,26.46c1.14,1.67,1.11,3.88-.07,5.52l-43.29,60.13c-.9,1.26-2.36,2-3.9,2ZM10.81,31.37l37.29,51.8,37.42-51.97-14.71-21.57H27.62L10.81,31.37ZM70.74,35.06c-6.52,2.2-9.42,5.1-11.63,11.62-.64,1.89-3.33,1.89-3.97,0-2.21-6.52-5.11-9.42-11.63-11.62-1.9-.64-1.9-3.35,0-3.99,6.52-2.2,9.42-5.1,11.63-11.62.64-1.89,3.33-1.89,3.97,0,2.21,6.52,5.11,9.42,11.63,11.62,1.9.64,1.9,3.35,0,3.99Z"/></svg>
@@ -812,7 +976,7 @@
         </div>
 
         <!-- Upgrade and migration (HANA Heros) -->
-        <div class="community-card" data-category="platform" data-name="Upgrade and migration HANA Heros">
+        <div class="community-card" data-category="platform" data-name="Upgrade and migration HANA Heros" data-tags="Migration Planning Service HEC Cloud Migration RISE Round Tables Bootcamp Cloud Migration Architects Project Managers CIRCLE ONE Elevator Sessions Expert Contact List Profile Parameter Comparison Tool">
             <div class="card-header">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96.21 96.21"><path d="M71.22,84.18H21.15c-11.66,0-21.15-9.49-21.15-21.15,0-10.6,7.84-19.4,18.03-20.92,0-.37,0-.73,0-1.1,0-15.98,13-28.99,28.99-28.99,12.25,0,22.96,7.62,27.12,18.91,12.62,2.28,22.06,13.26,22.06,26.37,0,9.13-4.6,17.55-12.3,22.54-3.44,2.75-7.96,4.34-12.69,4.34ZM21.15,51.51c-6.36,0-11.53,5.17-11.53,11.53s5.17,11.53,11.53,11.53h50.07c3.22,0,5.63-1.38,7.09-2.53,5.32-3.47,8.28-8.88,8.28-14.73,0-9.14-7.19-16.68-16.37-17.16-2.13-.11-3.93-1.61-4.43-3.67-2.11-8.73-9.82-14.82-18.76-14.82-10.68,0-19.37,8.69-19.37,19.37,0,1.69-.06,3.33-.12,4.92l-.03.93c-.09,2.59-2.22,4.64-4.81,4.64h-1.55Z"/></svg>
@@ -826,7 +990,7 @@
         </div>
 
         <!-- Platform Execution -->
-        <div class="community-card" data-category="platform" data-name="Platform Execution">
+        <div class="community-card coming-soon" data-category="platform" data-name="Platform Execution">
             <div class="card-header">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96.21 96.21"><path d="M40.89,96.21c-1.1,0-2.18-.38-3.05-1.09-1.11-.91-1.76-2.28-1.76-3.72v-40.41c0-2.29,1.62-4.27,3.87-4.72l50.51-10.1c1.41-.28,2.88.08,3.99,1,1.11.91,1.76,2.28,1.76,3.72v40.41c0,2.29-1.62,4.27-3.87,4.72l-50.51,10.1c-.31.06-.63.09-.94.09ZM45.7,54.94v30.6l40.89-8.18v-30.6l-40.89,8.18Z"/><path d="M22.85,78.17c-2.66,0-4.81-2.15-4.81-4.81v-40.41c0-2.29,1.62-4.27,3.87-4.72l50.51-10.1c2.61-.52,5.14,1.17,5.66,3.77.52,2.61-1.17,5.14-3.77,5.66l-46.64,9.33v36.46c0,2.66-2.15,4.81-4.81,4.81ZM4.81,60.13c-2.66,0-4.81-2.15-4.81-4.81V14.91c0-2.29,1.62-4.27,3.87-4.72L54.38.09c2.61-.52,5.14,1.17,5.66,3.77.52,2.61-1.17,5.14-3.77,5.66L9.62,18.86v36.46c0,2.66-2.15,4.81-4.81,4.81Z"/></svg>
@@ -835,11 +999,12 @@
             </div>
             <span class="card-category">Platform</span>
             <div class="card-buttons">
+                <span class="coming-soon-badge">Coming soon</span>
             </div>
         </div>
 
         <!-- Minimized Downtime Service (MDS) -->
-        <div class="community-card" data-category="platform" data-name="Minimized Downtime Service MDS">
+        <div class="community-card coming-soon" data-category="platform" data-name="Minimized Downtime Service MDS">
             <div class="card-header">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96.21 96.21"><path d="M50.9,96.21c-2.47,0-4.57-1.89-4.79-4.4-.23-2.65,1.73-4.98,4.38-5.21,20.58-1.77,36.09-18.29,36.09-38.42,0-21.27-17.82-38.57-39.72-38.57-14.54,0-27.65,7.53-34.55,19.3h18.95c2.66,0,4.81,2.15,4.81,4.81s-2.15,4.81-4.81,4.81H4.92c-.3,0-.61-.01-.92-.07-.57-.1-1.1-.29-1.58-.57-.62-.35-1.14-.83-1.53-1.39-.4-.56-.68-1.22-.81-1.93-.06-.32-.08-.64-.08-.97V5.03C0,2.37,2.16.22,4.81.22s4.81,2.15,4.81,4.81v11.36C18.77,6.2,32.25,0,46.87,0c27.21,0,49.34,21.62,49.34,48.19,0,25.16-19.3,45.8-44.89,48-.14.01-.28.02-.42.02ZM34.07,94.03c-.46,0-.93-.07-1.4-.21-5.74-1.74-10.85-4.55-14.78-8.14-1.96-1.79-2.1-4.83-.31-6.8,1.79-1.96,4.83-2.1,6.8-.31,2.83,2.59,6.77,4.73,11.08,6.04,2.54.77,3.98,3.46,3.21,6-.63,2.08-2.54,3.42-4.6,3.42ZM9.28,71.99c-1.86,0-3.62-1.08-4.41-2.89-2.26-5.2-3.78-9.98-4.78-15.03-.51-2.61,1.18-5.14,3.79-5.65,2.61-.51,5.14,1.18,5.65,3.79.86,4.36,2.18,8.51,4.16,13.05,1.06,2.44-.06,5.27-2.49,6.33-.62.27-1.28.4-1.92.4ZM30.68,69.96c-1.3,0-2.59-.52-3.53-1.55-1.8-1.95-1.68-4.99.27-6.8l17.15-15.85c.89-.82,2.05-1.28,3.26-1.28h20.54c2.66,0,4.81,2.15,4.81,4.81s-2.15,4.81-4.81,4.81h-18.65l-15.77,14.57c-.93.85-2.1,1.28-3.26,1.28Z"/></svg>
@@ -848,6 +1013,7 @@
             </div>
             <span class="card-category">Platform</span>
             <div class="card-buttons">
+                <span class="coming-soon-badge">Coming soon</span>
             </div>
         </div>
 
@@ -886,14 +1052,18 @@
 <script>
 (function() {
     var searchInput = document.getElementById('hubSearchInput');
+    var suggestions = document.getElementById('hubSearchSuggestions');
+    var suggestionItems = document.querySelectorAll('.suggestion-item');
     var categoryPills = document.querySelectorAll('.filter-pill[data-category]');
     var platformPills = document.querySelectorAll('.filter-pill[data-platform]');
+    var topicPills = document.querySelectorAll('.filter-pill[data-topic]');
     var cards = document.querySelectorAll('.community-card');
     var resultsCount = document.getElementById('hubResultsCount');
     var emptyState = document.getElementById('hubEmptyState');
 
     var activeCategory = 'all';
     var activePlatform = 'all';
+    var activeTopic = 'all';
 
     function filterCards() {
         var searchTerm = searchInput.value.toLowerCase().trim();
@@ -901,9 +1071,10 @@
 
         cards.forEach(function(card) {
             var name = card.getAttribute('data-name').toLowerCase();
+            var tags = (card.getAttribute('data-tags') || '').toLowerCase();
             var category = card.getAttribute('data-category');
 
-            var matchesSearch = name.indexOf(searchTerm) !== -1;
+            var matchesSearch = name.indexOf(searchTerm) !== -1 || tags.indexOf(searchTerm) !== -1;
             var matchesCategory = activeCategory === 'all' || category === activeCategory;
 
             var matchesPlatform = true;
@@ -918,7 +1089,12 @@
                 }
             }
 
-            if (matchesSearch && matchesCategory && matchesPlatform) {
+            var matchesTopic = true;
+            if (activeTopic !== 'all') {
+                matchesTopic = tags.indexOf(activeTopic.toLowerCase()) !== -1;
+            }
+
+            if (matchesSearch && matchesCategory && matchesPlatform && matchesTopic) {
                 card.classList.remove('hidden');
                 visibleCount++;
 
@@ -946,7 +1122,56 @@
         }
     }
 
-    searchInput.addEventListener('input', filterCards);
+    var allSuggestions = [];
+    suggestionItems.forEach(function(item) {
+        allSuggestions.push({ label: item.textContent.trim(), value: item.getAttribute('data-value'), el: item });
+    });
+
+    function updateSuggestions() {
+        var term = searchInput.value.toLowerCase().trim();
+        if (term === '') {
+            suggestions.classList.remove('visible');
+            return;
+        }
+        var hasVisible = false;
+        allSuggestions.forEach(function(s) {
+            if (s.label.toLowerCase().indexOf(term) !== -1 || s.value.toLowerCase().indexOf(term) !== -1) {
+                s.el.style.display = '';
+                hasVisible = true;
+            } else {
+                s.el.style.display = 'none';
+            }
+        });
+        document.querySelectorAll('.suggestions-group').forEach(function(group) {
+            var anyVisible = Array.from(group.querySelectorAll('.suggestion-item')).some(function(i) { return i.style.display !== 'none'; });
+            group.style.display = anyVisible ? '' : 'none';
+        });
+        suggestions.classList.toggle('visible', hasVisible);
+    }
+
+    searchInput.addEventListener('input', function() {
+        updateSuggestions();
+        filterCards();
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
+            suggestions.classList.remove('visible');
+        }
+    });
+
+    suggestionItems.forEach(function(item) {
+        item.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            searchInput.value = item.getAttribute('data-value');
+            suggestions.classList.remove('visible');
+            filterCards();
+        });
+    });
+
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') suggestions.classList.remove('visible');
+    });
 
     categoryPills.forEach(function(pill) {
         pill.addEventListener('click', function() {
@@ -964,6 +1189,23 @@
             activePlatform = pill.getAttribute('data-platform');
             filterCards();
         });
+    });
+
+    topicPills.forEach(function(pill) {
+        pill.addEventListener('click', function() {
+            topicPills.forEach(function(p) { p.classList.remove('active'); });
+            pill.classList.add('active');
+            activeTopic = pill.getAttribute('data-topic');
+            filterCards();
+        });
+    });
+
+    var filterToggle = document.getElementById('filterToggle');
+    var filterBody = document.getElementById('filterBody');
+    filterToggle.addEventListener('click', function() {
+        var collapsed = filterBody.classList.toggle('collapsed');
+        filterToggle.classList.toggle('collapsed', collapsed);
+        filterToggle.querySelector('svg').style.transform = collapsed ? 'rotate(-90deg)' : '';
     });
 })();
 </script>
